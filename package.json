@@ -1,0 +1,11 @@
+{
+  "name": "simple-form",
+  "version": "1.0.0",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "lodash": "^4.17.19"
+  },
+  "devDependencies": {
+    "validate.js": "^0.13.1"
+  }
+}
