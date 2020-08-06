@@ -1,4 +1,8 @@
-const  Form = require("./Form")
-module.exports.simplForm = {
-    form:Form,
-}
+import form from './Form';
+
+const f = new form({
+    name:"marc",
+})
+
+
+console.log(f)
