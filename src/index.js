@@ -1,8 +1,3 @@
-import form from './Form';
+import Form from './Form';
 
-const f = new form({
-    name:"marc",
-})
-
-
-console.log(f)
+export default Form

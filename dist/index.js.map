@@ -1,1 +1,1 @@
-{"version":3,"sources":["../src/index.js"],"names":["f","form","name","console","log"],"mappings":";;AAAA;;;;;;AAEA,IAAMA,IAAI,IAAIC,cAAJ,CAAS;AACfC,UAAK;AADU,CAAT,CAAV;;AAKAC,QAAQC,GAAR,CAAYJ,CAAZ","file":"index.js","sourcesContent":["import form from './Form';\n\nconst f = new form({\n    name:\"marc\",\n})\n\n\nconsole.log(f)"]}
+{"version":3,"sources":["../src/index.js"],"names":["Form"],"mappings":";;;;;;AAAA;;;;;;kBAEeA,c","file":"index.js","sourcesContent":["import Form from './Form';\n\nexport default Form\n"]}
