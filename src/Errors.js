@@ -7,7 +7,6 @@ class Errors {
 
     has(field) {
         return this.data.hasOwnProperty(field);
-
     }
 
 
@@ -39,6 +38,19 @@ class Errors {
     onSuccess() {
         this.data = {}
     }
+
+    onFail(error) {
+        alert(JSON.stringify(error))
+        this.errors.clear()
+        if (error.message) {
+            this.errors.record(error.message);
+        } else {
+            this.errors.record({
+                server: ["Une erreur est survenue. Veuillez raffréchire la page."],
+            })
+        }
+    }
+
 
 }
 
