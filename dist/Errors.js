@@ -54,6 +54,19 @@ var Errors = function () {
         value: function onSuccess() {
             this.data = {};
         }
+    }, {
+        key: "onFail",
+        value: function onFail(error) {
+            alert(JSON.stringify(error));
+            this.errors.clear();
+            if (error.message) {
+                this.errors.record(error.message);
+            } else {
+                this.errors.record({
+                    server: ["Une erreur est survenue. Veuillez raffréchire la page."]
+                });
+            }
+        }
     }]);
 
     return Errors;

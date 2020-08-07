@@ -3,6 +3,7 @@
     "start": "node bin/dev",
     "clean": "rm -rf dist",
     "build": "npm run clean && mkdir dist && babel src -s -d dist",
+    "watch": "npm run clean && mkdir dist && babel src -s -w -d dist",
     "prod": "npm run build && node bin/production"
   },
   "type": "module",
