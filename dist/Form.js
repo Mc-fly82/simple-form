@@ -124,6 +124,19 @@ var Form = function () {
         key: "reset",
         value: function reset() {}
     }, {
+        key: "onFail",
+        value: function onFail(error) {
+            alert(JSON.stringify(this.errors.data));
+            this.errors.clear();
+            if (error.message) {
+                this.errors.record(error.message);
+            } else {
+                this.errors.record({
+                    server: ["Une erreur est survenue. Veuillez raffréchire la page."]
+                });
+            }
+        }
+    }, {
         key: "isValide",
         get: function get() {
             var _this = this;
