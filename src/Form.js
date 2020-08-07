@@ -101,9 +101,6 @@ class Form {
 
     }
 
-    dodo   (){
-        
-    }
 }
 
 export default Form

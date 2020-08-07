@@ -124,9 +124,6 @@ var Form = function () {
         key: "reset",
         value: function reset() {}
     }, {
-        key: "dodo",
-        value: function dodo() {}
-    }, {
         key: "isValide",
         get: function get() {
             var _this = this;
