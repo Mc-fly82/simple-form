@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./axiosSetup";
 import Errors from "./Errors"
 import _ from 'lodash'
 import validate from 'validate.js'
@@ -11,6 +11,7 @@ validate.validators.email.options = {message: "- Le format semble incorrect"};
 class Form {
     constructor(data) {
         this.errors = new Errors()
+        window.errors = this.errors
         this.originalData = {}
         this.proxy(data);
         this.currentStepIndex = 0
@@ -33,12 +34,7 @@ class Form {
         this.checkDuplicate(data)
 
         for (let field in data) {
-            if (_.isArray(data[field])) {
-                this[field] = data[field][0].value || "";
-                Object.assign(this.constraints, {[field]: data[field][0].constraints})
-            } else {
-                this[field] = data[field] || false
-            }
+            this[field] = data[field]
         }
 
         let originalData = Object.assign(this.originalData, data);
@@ -80,11 +76,14 @@ class Form {
     }
 
     submit(action, endpoint) {
-        if (Object.keys(this.errors.data).length <= 0) {
+            console.log('submited')
             return axios[action.toLowerCase()](endpoint, {
                 ...this.data(),
             })
-        }
+    }
+
+    hasNoErrors() {
+        return Object.keys(this.errors.data).length === 0;
     }
 
     get isValide() {
@@ -93,7 +92,6 @@ class Form {
         let bag = Object.keys(data)
             .map(__ => this.validate(__, data[__]))
             .filter(__ => undefined !== __);
-
         return bag.length > 0 ? bag : true;
     }
 
@@ -101,15 +99,22 @@ class Form {
 
     }
 
-    onFail(error) {
-        alert(JSON.stringify(this.errors.data))
-        this.errors.clear()
-        if (error.message) {
-            this.errors.record(error.message);
+    onSuccess() {
+        console.log("onSuccess")
+        this.errors.clear();
+        this.data = {}
+
+    }
+
+    onFail(res) {
+        console.log("onFail")
+        console.log(res?.data?.errors);
+
+        let errors = res?.data?.errors;
+        if (!!errors) {
+            this.errors.record(errors);
         } else {
-            this.errors.record({
-                server: ["Une erreur est survenue. Veuillez raffréchire la page."],
-            })
+            this.errors.clear();
         }
     }
 

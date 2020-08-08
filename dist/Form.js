@@ -1,160 +1,172 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
+exports["default"] = void 0;
 
-var _extends2 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _axiosSetup = _interopRequireDefault(require("./axiosSetup"));
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _Errors = _interopRequireDefault(require("./Errors"));
 
-var _axios = require("axios");
+var _lodash = _interopRequireDefault(require("lodash"));
 
-var _axios2 = _interopRequireDefault(_axios);
+var _validate3 = _interopRequireDefault(require("validate.js"));
 
-var _Errors = require("./Errors");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var _Errors2 = _interopRequireDefault(_Errors);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-var _lodash = require("lodash");
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _validate3 = require("validate.js");
-
-var _validate4 = _interopRequireDefault(_validate3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 // TODO: Marc Flavius - spell check
-_validate4.default.validators.presence.options = { message: "- Ce champ est requis" };
-_validate4.default.validators.email.options = { message: "- Le format semble incorrect" };
+_validate3["default"].validators.presence.options = {
+  message: "- Ce champ est requis"
+};
+_validate3["default"].validators.email.options = {
+  message: "- Le format semble incorrect"
+};
 
-var Form = function () {
-    function Form(data) {
-        _classCallCheck(this, Form);
+var Form = /*#__PURE__*/function () {
+  function Form(data) {
+    _classCallCheck(this, Form);
 
-        this.errors = new _Errors2.default();
-        this.originalData = {};
-        this.proxy(data);
-        this.currentStepIndex = 0;
-        this.constraints = {};
+    this.errors = new _Errors["default"]();
+    window.errors = this.errors;
+    this.originalData = {};
+    this.proxy(data);
+    this.currentStepIndex = 0;
+    this.constraints = {};
+  }
+
+  _createClass(Form, [{
+    key: "checkDuplicate",
+    value: function checkDuplicate(data) {
+      for (var field in data) {
+        if (Object.keys(this.originalData).includes(field)) {
+          throw new Error("key " + field + " allready exists on form Object");
+        }
+      }
     }
+  }, {
+    key: "proxy",
+    value: function proxy(data) {
+      if (_lodash["default"].isEmpty(data)) {
+        return;
+      }
 
-    _createClass(Form, [{
-        key: "checkDuplicate",
-        value: function checkDuplicate(data) {
-            for (var field in data) {
-                if (Object.keys(this.originalData).includes(field)) {
-                    throw new Error("key " + field + " allready exists on form Object");
-                }
-            }
-        }
-    }, {
-        key: "proxy",
-        value: function proxy(data) {
-            if (_lodash2.default.isEmpty(data)) {
-                return;
-            }
+      this.checkDuplicate(data);
 
-            this.checkDuplicate(data);
+      for (var field in data) {
+        this[field] = data[field];
+      }
 
-            for (var field in data) {
-                if (_lodash2.default.isArray(data[field])) {
-                    this[field] = data[field][0].value || "";
-                    Object.assign(this.constraints, _defineProperty({}, field, data[field][0].constraints));
-                } else {
-                    this[field] = data[field] || false;
-                }
-            }
+      var originalData = Object.assign(this.originalData, data);
+      delete this.originalData;
+      this.originalData = originalData;
+    }
+  }, {
+    key: "data",
+    value: function data() {
+      var data = Object.assign({}, this);
+      delete data.originalData;
+      delete data.errors;
+      return data;
+    }
+  }, {
+    key: "extends",
+    value: function _extends(data) {
+      this.proxy(data);
+    }
+  }, {
+    key: "validator",
+    value: function validator(field, value) {
+      return (0, _validate3["default"])(_defineProperty({}, field, value), _defineProperty({}, field, this.constraints[field]));
+    }
+  }, {
+    key: "validate",
+    value: function validate(field, value) {
+      var messageBag = this.validator(field, value);
 
-            var originalData = Object.assign(this.originalData, data);
-            delete this.originalData;
-            this.originalData = originalData;
-        }
-    }, {
-        key: "data",
-        value: function data() {
-            var data = Object.assign({}, this);
-            delete data.originalData;
-            delete data.errors;
-            return data;
-        }
-    }, {
-        key: "extends",
-        value: function _extends(data) {
-            this.proxy(data);
-        }
-    }, {
-        key: "validator",
-        value: function validator(field, value) {
-            return (0, _validate4.default)(_defineProperty({}, field, value), _defineProperty({}, field, this.constraints[field]));
-        }
-    }, {
-        key: "validate",
-        value: function validate(field, value) {
-            var messageBag = this.validator(field, value);
-            if (_lodash2.default.isEmpty(messageBag) || undefined) {
-                this.errors.clear(field);
-                return;
-            }
-            this.errors.set(field, messageBag);
-            return messageBag;
-        }
-    }, {
-        key: "update",
-        value: function update(field, value) {
-            if (!_lodash2.default.isEmpty(value)) {
-                return;
-            }
-            this[field] = value;
-        }
-    }, {
-        key: "submit",
-        value: function submit(action, endpoint) {
-            if (Object.keys(this.errors.data).length <= 0) {
-                return _axios2.default[action.toLowerCase()](endpoint, _extends2({}, this.data()));
-            }
-        }
-    }, {
-        key: "reset",
-        value: function reset() {}
-    }, {
-        key: "onFail",
-        value: function onFail(error) {
-            alert(JSON.stringify(this.errors.data));
-            this.errors.clear();
-            if (error.message) {
-                this.errors.record(error.message);
-            } else {
-                this.errors.record({
-                    server: ["Une erreur est survenue. Veuillez raffréchire la page."]
-                });
-            }
-        }
-    }, {
-        key: "isValide",
-        get: function get() {
-            var _this = this;
+      if (_lodash["default"].isEmpty(messageBag) || undefined) {
+        this.errors.clear(field);
+        return;
+      }
 
-            var data = this.data();
+      this.errors.set(field, messageBag);
+      return messageBag;
+    }
+  }, {
+    key: "update",
+    value: function update(field, value) {
+      if (!_lodash["default"].isEmpty(value)) {
+        return;
+      }
 
-            var bag = Object.keys(data).map(function (__) {
-                return _this.validate(__, data[__]);
-            }).filter(function (__) {
-                return undefined !== __;
-            });
+      this[field] = value;
+    }
+  }, {
+    key: "submit",
+    value: function submit(action, endpoint) {
+      console.log('submited');
+      return _axiosSetup["default"][action.toLowerCase()](endpoint, _objectSpread({}, this.data()));
+    }
+  }, {
+    key: "hasNoErrors",
+    value: function hasNoErrors() {
+      return Object.keys(this.errors.data).length === 0;
+    }
+  }, {
+    key: "reset",
+    value: function reset() {}
+  }, {
+    key: "onSuccess",
+    value: function onSuccess() {
+      console.log("onSuccess");
+      this.errors.clear();
+      this.data = {};
+    }
+  }, {
+    key: "onFail",
+    value: function onFail(res) {
+      var _res$data, _res$data2;
 
-            return bag.length > 0 ? bag : true;
-        }
-    }]);
+      console.log("onFail");
+      console.log(res === null || res === void 0 ? void 0 : (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.errors);
+      var errors = res === null || res === void 0 ? void 0 : (_res$data2 = res.data) === null || _res$data2 === void 0 ? void 0 : _res$data2.errors;
 
-    return Form;
+      if (!!errors) {
+        this.errors.record(errors);
+      } else {
+        this.errors.clear();
+      }
+    }
+  }, {
+    key: "isValide",
+    get: function get() {
+      var _this = this;
+
+      var data = this.data();
+      var bag = Object.keys(data).map(function (__) {
+        return _this.validate(__, data[__]);
+      }).filter(function (__) {
+        return undefined !== __;
+      });
+      return bag.length > 0 ? bag : true;
+    }
+  }]);
+
+  return Form;
 }();
 
-exports.default = Form;
+var _default = Form;
+exports["default"] = _default;
 //# sourceMappingURL=Form.js.map

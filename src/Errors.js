@@ -6,7 +6,10 @@ class Errors {
 
 
     has(field) {
+        if(field) {
         return this.data.hasOwnProperty(field);
+        }
+        return Object.keys(this.data).length <= 0
     }
 
 
@@ -18,7 +21,8 @@ class Errors {
 
     set(field, messageBag) {
         delete this.data[field];
-        this.data[field] = messageBag[field]
+        this.data[field] = messageBag
+        console.log("set: ",this.data)
     }
 
     record(data) {
@@ -26,7 +30,6 @@ class Errors {
     }
 
     clear(field) {
-
         if (field) {
             delete this.data[field];
             return
@@ -34,24 +37,6 @@ class Errors {
 
         this.data = {};
     }
-
-    onSuccess() {
-        this.data = {}
-    }
-
-    onFail(error) {
-        alert(JSON.stringify(error))
-        this.errors.clear()
-        if (error.message) {
-            this.errors.record(error.message);
-        } else {
-            this.errors.record({
-                server: ["Une erreur est survenue. Veuillez raffréchire la page."],
-            })
-        }
-    }
-
-
 }
 
 export default Errors

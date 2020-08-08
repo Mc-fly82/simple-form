@@ -1,1 +1,1 @@
-{"version":3,"sources":["../src/index.js"],"names":["Form"],"mappings":";;;;;;AAAA;;;;;;kBAEeA,c","file":"index.js","sourcesContent":["import Form from './Form';\n\nexport default Form\n"]}
+{"version":3,"sources":["../src/index.js"],"names":["Form"],"mappings":";;;;;;;AAAA;;;;eAEeA,gB","sourcesContent":["import Form from './Form';\n\nexport default Form\n"],"file":"index.js"}
