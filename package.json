@@ -9,7 +9,6 @@
   "type": "module",
   "name": "@mcfly82/simple-form",
   "version": "1.0.0",
-  "private": true,
   "dependencies": {
     "axios": "^0.19.2",
     "lodash": "^4.17.19"
