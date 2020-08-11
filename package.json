@@ -26,7 +26,7 @@
     "validate.js": "^0.13.1"
   },
   "description": "simple form validation",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Mc-fly82/simple-form.git"
