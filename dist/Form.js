@@ -116,7 +116,7 @@ var Form = /*#__PURE__*/function () {
   }, {
     key: "submit",
     value: function submit(action, endpoint) {
-      console.log('submited');
+      console.log("action", action, "endpoint", endpoint);
       return _axiosSetup["default"][action.toLowerCase()](endpoint, _objectSpread({}, this.data()));
     }
   }, {
@@ -137,11 +137,9 @@ var Form = /*#__PURE__*/function () {
   }, {
     key: "onFail",
     value: function onFail(res) {
-      var _res$data, _res$data2;
-
       console.log("onFail");
-      console.log(res === null || res === void 0 ? void 0 : (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.errors);
-      var errors = res === null || res === void 0 ? void 0 : (_res$data2 = res.data) === null || _res$data2 === void 0 ? void 0 : _res$data2.errors;
+      console.log(res);
+      var errors = res === null || res === void 0 ? void 0 : res.data;
 
       if (!!errors) {
         this.errors.record(errors);

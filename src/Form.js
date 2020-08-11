@@ -76,7 +76,7 @@ class Form {
     }
 
     submit(action, endpoint) {
-            console.log('submited')
+            console.log("action",action, "endpoint", endpoint)
             return axios[action.toLowerCase()](endpoint, {
                 ...this.data(),
             })
@@ -103,14 +103,13 @@ class Form {
         console.log("onSuccess")
         this.errors.clear();
         this.data = {}
-
     }
 
     onFail(res) {
-        console.log("onFail")
-        console.log(res?.data?.errors);
+        console.log("onFail");
+        console.log(res)
 
-        let errors = res?.data?.errors;
+        let errors = res?.data;
         if (!!errors) {
             this.errors.record(errors);
         } else {
