@@ -1,4 +1,7 @@
 {
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "start": "node bin/dev",
     "clean": "rm -rf dist",
@@ -7,7 +10,7 @@
     "prod": "npm run build && node bin/production"
   },
   "type": "module",
-  "name": "@mcfly82/simple-form",
+  "name": "@mclfy82/simple-form",
   "version": "1.0.0",
   "dependencies": {
     "axios": "^0.19.2",
